@@ -5,6 +5,55 @@
     box-sizing: border-box;
 }
 
+/* Bootstrap 覆盖样式 - 保持原有样式 */
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.col, .col-auto, [class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* 保持原有表单样式 */
+.form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 保持原有表格样式 */
+.table {
+    margin-bottom: 0;
+}
+
+.table th,
+.table td {
+    border-top: 1px solid #eee;
+    padding: 15px;
+    text-align: left;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 1.6;
@@ -22,13 +71,36 @@ body {
 
 /* 作品分類及以下區域使用全螢幕容器 */
 .work-categories .container,
+.work-categories .container-fluid,
 .works .container,
+.works .container-fluid,
 .about .container,
 .future .container,
 .contact .container,
 .footer .container {
     max-width: none;
     padding: 0;
+}
+
+/* Bootstrap 网格系统覆盖 - 保持原有样式 */
+.work-categories .row,
+.works .row,
+.about .row,
+.future .row,
+.contact .row,
+.footer .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.work-categories [class*="col-"],
+.works [class*="col-"],
+.about [class*="col-"],
+.future [class*="col-"],
+.contact [class*="col-"],
+.footer [class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 /* 為內容新增內邊距 */
@@ -62,7 +134,18 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 10px 20px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.navbar .container > * {
+    flex-shrink: 0;
+}
+
+.navbar .logo {
+    flex: 0 0 auto;
 }
 
 .logo {
@@ -83,7 +166,14 @@ body {
     list-style: none;
     gap: 30px;
     align-items: center;
-    /* Ensure vertical alignment */
+    margin-left: auto;
+    flex: 0 0 auto;
+    /* Ensure vertical alignment and right alignment */
+}
+
+.navbar .hamburger {
+    flex: 0 0 auto;
+    margin-left: 20px;
 }
 
 /* Auth links container styles */
@@ -498,6 +588,7 @@ body {
     margin: 0 auto;
 }
 
+
 .about-image {
     width: 100%;
     height: 400px;
@@ -550,6 +641,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
 }
+
 
 .future-text h2 {
     font-size: 3rem;
@@ -673,6 +765,16 @@ body {
     padding: 40px 20px;
     max-width: 1200px;
     margin: 0 auto;
+}
+
+.footer-content .row {
+    width: 100%;
+    margin: 0;
+}
+
+.footer-content [class*="col-"] {
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .footer-logo {
