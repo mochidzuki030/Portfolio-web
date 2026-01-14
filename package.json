@@ -6,11 +6,10 @@
     "start": "node server.js",
     "prod": "NODE_ENV=production node server.js",
     "check": "node check-system.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "npm rebuild sqlite3 --build-from-source"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
-    "node": "18.0.0", 
+    "node": "18.0.0",
     "npm": ">=9.0.0"
   },
   "keywords": [],
