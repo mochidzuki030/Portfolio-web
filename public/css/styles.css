@@ -5,7 +5,6 @@
     box-sizing: border-box;
 }
 
-/* Bootstrap 覆盖样式 - 保持原有样式 */
 .container-fluid {
     padding-left: 0;
     padding-right: 0;
@@ -21,7 +20,6 @@
     padding-right: 0;
 }
 
-/* 保持原有表单样式 */
 .form-control {
     border: 2px solid #e0e0e0;
     border-radius: 10px;
@@ -36,7 +34,6 @@
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-/* 保持原有表格样式 */
 .table {
     margin-bottom: 0;
 }
@@ -82,7 +79,6 @@ body {
     padding: 0;
 }
 
-/* Bootstrap 网格系统覆盖 - 保持原有样式 */
 .work-categories .row,
 .works .row,
 .about .row,
@@ -168,7 +164,7 @@ body {
     align-items: center;
     margin-left: auto;
     flex: 0 0 auto;
-    /* Ensure vertical alignment and right alignment */
+    /* 確保垂直對齊和正確對齊 */
 }
 
 .navbar .hamburger {
@@ -176,11 +172,11 @@ body {
     margin-left: 20px;
 }
 
-/* Auth links container styles */
+/* 身份驗證連結容器樣式 */
 #nav-auth-container {
     display: flex;
     gap: 20px;
-    /* Space between username, admin, login/logout */
+    /* 使用者名稱、管理員、登入/登出之間留有空格 */
     align-items: center;
 }
 
@@ -265,7 +261,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    /* 视差滚动的关键：固定背景 */
+    /* 視差滾動的關鍵：固定背景 */
 }
 
 .slide.active {
@@ -276,12 +272,12 @@ body {
     text-align: center;
     color: white;
     transform: translateY(var(--scroll-y, 0));
-    /* 动态位移 */
+    /* 動態位移 */
     opacity: var(--hero-opacity, 1);
     scale: var(--hero-scale, 1);
     filter: blur(var(--hero-blur, 0));
     transition: transform 0.1s ease-out;
-    /* 让 JS 驱动的位移更平滑 */
+    /* 讓 JS 驅動的位移更平滑 */
 }
 
 @keyframes slideUp {
