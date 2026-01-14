@@ -6,9 +6,7 @@
     "start": "node server.js",
     "prod": "NODE_ENV=production node server.js",
     "check": "node check-system.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "preinstall": "npm uninstall sqlite3",
-    "postinstall": "npm install sqlite3@5.1.7 --build-from-source --sqlite=/usr/bin/sqlite3"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -25,6 +23,6 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-session": "^1.18.2",
-    "sqlite3": "^5.1.7"
+    "better-sqlite3": "^9.4.3"
   }
 }

@@ -1,5 +1,6 @@
+// db.js
 const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+const Database = require('better-sqlite3');
 
 // 注意：使用者檔案名稱為「Porfolio.db」（保留原始拼字）。
 const DB_FILE = process.env.SQLITE_FILE || path.join(__dirname, 'Porfolio.db');
@@ -8,7 +9,15 @@ let db;
 
 function openDb() {
     if (db) return db;
-    db = new sqlite3.Database(DB_FILE);
+    db = new Database(DB_FILE);
+    
+    // 啟用外鍵約束
+    db.pragma('foreign_keys = ON');
+    
+    // 提升性能的設置
+    db.pragma('journal_mode = WAL');
+    db.pragma('synchronous = NORMAL');
+    
     return db;
 }
 
@@ -22,55 +31,46 @@ function getSqlVerb(sql) {
     return s.split(/\s+/)[0] || '';
 }
 
-function allAsync(sql, params) {
-    const database = openDb();
-    const p = normalizeParams(params);
-    return new Promise((resolve, reject) => {
-        database.all(sql, p, (err, rows) => {
-            if (err) return reject(err);
-            resolve(rows);
-        });
-    });
-}
-
-function runAsync(sql, params) {
-    const database = openDb();
-    const p = normalizeParams(params);
-    return new Promise((resolve, reject) => {
-        database.run(sql, p, function (err) {
-            if (err) return reject(err);
-            // sqlite3 會在目前 this 物件上提供 lastID / changes 屬性
-            resolve({ lastID: this.lastID, changes: this.changes });
-        });
-    });
-}
-
-/**
- * 一個簡單的相容層，讓既有程式碼可以繼續使用：
- *   const [rows] = await pool.query(sql, params)
- * 用法與 mysql2/promise 類似。
- */
+// 為兼容原代码，创建类似 MySQL 的查询接口
 const pool = {
     async query(sql, params) {
+        const database = openDb();
+        const p = normalizeParams(params);
         const verb = getSqlVerb(sql);
-        if (verb === 'SELECT' || verb === 'PRAGMA' || verb === 'WITH') {
-            const rows = await allAsync(sql, params);
-            return [rows];
+        
+        try {
+            if (verb === 'SELECT' || verb === 'PRAGMA' || verb === 'WITH') {
+                const stmt = database.prepare(sql);
+                const rows = stmt.all(...p);
+                return [rows];
+            } else {
+                const stmt = database.prepare(sql);
+                const result = stmt.run(...p);
+                
+                // 模仿 mysql2 的返回格式
+                return [{
+                    insertId: result.lastInsertRowid,
+                    affectedRows: result.changes,
+                    changes: result.changes,
+                    lastID: result.lastInsertRowid
+                }];
+            }
+        } catch (err) {
+            console.error('Database query error:', err.message, 'SQL:', sql);
+            throw err;
         }
-        const result = await runAsync(sql, params);
-        // mimic mysql2 result shape where server.js expects `result.insertId`
-        return [{ insertId: result.lastID, affectedRows: result.changes, changes: result.changes }];
     }
 };
 
 async function initDb() {
     try {
-        openDb();
+        const database = openDb();
 
         // 啟用外鍵約束
-        await pool.query('PRAGMA foreign_keys = ON');
+        database.pragma('foreign_keys = ON');
 
-        await pool.query(`
+        // 創建 users 表
+        database.prepare(`
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL UNIQUE,
@@ -78,9 +78,10 @@ async function initDb() {
                 password TEXT NOT NULL,
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
-        `);
+        `).run();
 
-        await pool.query(`
+        // 創建 messages 表
+        database.prepare(`
             CREATE TABLE IF NOT EXISTS messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER,
@@ -91,12 +92,26 @@ async function initDb() {
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
             )
-        `);
+        `).run();
+
+        // 創建索引以提高查詢性能
+        database.prepare('CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)').run();
+        database.prepare('CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)').run();
+        database.prepare('CREATE INDEX IF NOT EXISTS idx_messages_user_id ON messages(user_id)').run();
 
         console.log(`SQLite database initialized successfully: ${DB_FILE}`);
+        
+        // 檢查是否有 admin 用戶，如果沒有則創建一個
+        const adminCheck = database.prepare('SELECT id FROM users WHERE username = ?').get('admin');
+        if (!adminCheck) {
+            console.log('No admin user found. You may want to create one.');
+        }
+        
+        return database;
     } catch (err) {
         console.error('Database initialization failed:', err);
+        throw err;
     }
 }
 
-module.exports = { pool, initDb, DB_FILE };
+module.exports = { pool, initDb, DB_FILE, openDb };
