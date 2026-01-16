@@ -149,28 +149,20 @@
 
     <!-- 作品分類導航 -->
     <section class="work-categories">
-        <div class="container-fluid">
-            <div class="row justify-content-center">
-                <div class="col-12">
-                    <h2>作品分類</h2>
-                    <div class="categories">
-                        <button class="category-btn active" data-category="all">全部作品</button>
-                        <button class="category-btn" data-category="Scene design">場景設計</button>
-                        <button class="category-btn" data-category="Character Design">角色設計</button>
-                        <button class="category-btn" data-category="photography">攝影作品</button>
-                        <button class="category-btn" data-category="craft">手做作品</button>
-                    </div>
-                </div>
-            </div>
+        <h2>作品分類</h2>
+        <div class="categories">
+            <button class="category-btn active" data-category="all">全部作品</button>
+            <button class="category-btn" data-category="Scene design">場景設計</button>
+            <button class="category-btn" data-category="Character Design">角色設計</button>
+            <button class="category-btn" data-category="photography">攝影作品</button>
+            <button class="category-btn" data-category="craft">手做作品</button>
         </div>
     </section>
 
     <!-- 作品網格展示 -->
-    <section id="works" class="works scroll-animate">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="works-grid">
+    <section id="works" class="works">
+        <div class="works-grid">
+            <div class="works-track">
                 <!-- 場景設計 -->
                 <div class="work-item" data-category="Scene design">
                     <div class="work-image lazy-bg" data-bg-src="imgs/Portfolio/Scene design/01.jpg">
@@ -418,25 +410,27 @@
                         </div>
                     </div>
                 </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
     <!-- 作者介紹區域 -->
     <section id="about" class="about scroll-animate">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-image"
-                    style="background-image: url('imgs/author/01.jpg'); background-size: cover; background-position: center;">
-                    <div class="logo-placeholder"></div>
+        <div class="container py-5">
+            <div class="row about-content align-items-center g-4 g-lg-5">
+                <div class="col-12 col-lg-6">
+                    <div class="about-image"
+                        style="background-image: url('imgs/author/01.jpg'); background-size: cover; background-position: center;">
+                        <div class="logo-placeholder"></div>
+                    </div>
                 </div>
-                <div class="about-text">
-                    <h2>作者介紹</h2>
-                    <p>我是一位多媒體設計系的學生，擁有多年的設計經驗。我的設計理念是將創新與藝術相結合，創造出獨特而有影響力的作品。</p>
-                    <p>我擅長場景設計、角色設計、攝影和手作，致力於為客戶提供高質量的設計解決方案。</p>
-                    <p>我的設計風格簡約而不簡單，注重細節和使用者體驗，力求每一個作品都能傳達出獨特的設計思想和情感。</p>
+                <div class="col-12 col-lg-6">
+                    <div class="about-text">
+                        <h2>作者介紹</h2>
+                        <p>我是一位多媒體設計系的學生，擁有多年的設計經驗。我的設計理念是將創新與藝術相結合，創造出獨特而有影響力的作品。</p>
+                        <p>我擅長場景設計、角色設計、攝影和手作，致力於為客戶提供高質量的設計解決方案。</p>
+                        <p>我的設計風格簡約而不簡單，注重細節和使用者體驗，力求每一個作品都能傳達出獨特的設計思想和情感。</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -444,17 +438,21 @@
 
     <!-- 未來展望區域 -->
     <section id="future" class="future scroll-animate">
-        <div class="container">
-            <div class="future-content">
-                <div class="future-text">
-                    <h2>未來展望</h2>
-                    <p>在未來，我將繼續致力於創意設計領域的探索和創新，不斷提升自己的設計能力和藝術修養。</p>
-                    <p>我計劃拓展更多的設計領域，包括3D設計、動效設計和互動設計，為客戶提供更加多元化的設計解決方案。</p>
-                    <p>我相信設計的力量可以改變世界，我將用我的設計作品傳遞正能量，影響更多的人。</p>
+        <div class="container py-5">
+            <div class="row future-content align-items-center g-4 g-lg-5">
+                <div class="col-12 col-lg-6 order-lg-1">
+                    <div class="future-text">
+                        <h2>未來展望</h2>
+                        <p>在未來，我將繼續致力於創意設計領域的探索和創新，不斷提升自己的設計能力和藝術修養。</p>
+                        <p>我計劃拓展更多的設計領域，包括3D設計、動效設計和互動設計，為客戶提供更加多元化的設計解決方案。</p>
+                        <p>我相信設計的力量可以改變世界，我將用我的設計作品傳遞正能量，影響更多的人。</p>
+                    </div>
                 </div>
-                <div class="future-image"
-                    style="background-image: url('imgs/hero/05.png'); background-size: cover; background-position: center;">
-                    <div class="image-placeholder"></div>
+                <div class="col-12 col-lg-6 order-lg-2">
+                    <div class="future-image"
+                        style="background-image: url('imgs/hero/05.png'); background-size: cover; background-position: center;">
+                        <div class="image-placeholder"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -462,7 +460,7 @@
 
     <!-- 聯繫方式表單 -->
     <section id="contact" class="contact scroll-animate">
-        <div class="container">
+        <div class="container py-5">
             <div class="row justify-content-center">
                 <div class="col-12">
                     <h2>聯繫方式</h2>
@@ -508,7 +506,7 @@
 
     <!-- 頁腳區域 -->
     <footer class="footer">
-        <div class="container">
+        <div class="container py-5">
             <div class="footer-content">
                 <div class="row align-items-center">
                     <div class="col-lg-4 col-md-12 text-center text-lg-start mb-3 mb-lg-0">
@@ -553,6 +551,12 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- GSAP Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Animation Manager -->
+    <script src="js_fold/gsap-animation-manager.js"></script>
+    <!-- Main Script -->
     <script src="js_fold/script.js"></script>
 </body>
 

@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initAdvancedParallax();
     initAuthHandlers();
     initValidationMessages(); // 自訂表單驗證訊息
+    initGSAPAnimation(); // Initialize GSAP scroll parallax animation
 });
 
 // 漢堡選單功能
@@ -141,6 +142,7 @@ function initAdvancedParallax() {
 function initWorkFilter() {
     const categoryBtns = document.querySelectorAll('.category-btn');
     const workItems = document.querySelectorAll('.work-item');
+    let refreshTimeout;
 
     if (categoryBtns.length === 0 || workItems.length === 0) return;
 
@@ -167,6 +169,13 @@ function initWorkFilter() {
                     item.style.transitionDelay = '0s';
                 }
             });
+
+            if (window.gsapAnimationManager) {
+                clearTimeout(refreshTimeout);
+                refreshTimeout = setTimeout(() => {
+                    window.gsapAnimationManager.refreshPortfolioAnimation();
+                }, 650);
+            }
         });
     });
 }
@@ -183,7 +192,11 @@ function initScrollAnimations() {
 
         animateElements.forEach(element => {
             const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-            if (scrollPosition >= elementPosition) {
+            
+            // 如果元素在视口上方（用户往回滚动），立即显示，不要动画
+            if (element.getBoundingClientRect().top < 0) {
+                element.classList.add('visible');
+            } else if (scrollPosition >= elementPosition) {
                 element.classList.add('visible');
             }
         });
@@ -267,39 +280,23 @@ function initSmoothScroll() {
 function initLazyLoading() {
     const lazyElements = document.querySelectorAll('.lazy-bg');
 
-    if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver(function (entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const element = entry.target;
-                    const bgSrc = element.getAttribute('data-bg-src');
-                    if (bgSrc) {
-                        element.style.backgroundImage = `url('${bgSrc}')`;
-                        element.style.backgroundSize = 'cover';
-                        element.style.backgroundPosition = 'center';
-                        element.classList.remove('lazy-bg');
-                        observer.unobserve(element);
-                    }
-                }
-            });
-        }, {
-            rootMargin: '0px 0px 100px 0px'
-        });
+    // 立即加载所有图片，避免滚动时出现空白
+    lazyElements.forEach(element => {
+        const bgSrc = element.getAttribute('data-bg-src');
+        if (bgSrc) {
+            element.style.backgroundImage = `url('${bgSrc}')`;
+            element.style.backgroundSize = 'cover';
+            element.style.backgroundPosition = 'center';
+            element.classList.remove('lazy-bg');
+        }
+    });
 
-        lazyElements.forEach(element => {
-            observer.observe(element);
-        });
-    } else {
-        // 降級方案：如果瀏覽器不支援IntersectionObserver，則直接載入所有圖片
-        lazyElements.forEach(element => {
-            const bgSrc = element.getAttribute('data-bg-src');
-            if (bgSrc) {
-                element.style.backgroundImage = `url('${bgSrc}')`;
-                element.style.backgroundSize = 'cover';
-                element.style.backgroundPosition = 'center';
-                element.classList.remove('lazy-bg');
-            }
-        });
+    // Refresh GSAP animation after all images loaded
+    if (window.gsapAnimationManager) {
+        // 等待一小段时间确保图片开始加载
+        setTimeout(() => {
+            window.gsapAnimationManager.refreshPortfolioAnimation();
+        }, 100);
     }
 }
 
@@ -541,5 +538,32 @@ function initValidationMessages() {
         input.addEventListener('input', function () {
             this.setCustomValidity('');
         });
+    });
+}
+
+
+// GSAP 滾動視差動畫初始化
+function initGSAPAnimation() {
+    // Create animation manager instance
+    const animationManager = new GSAPAnimationManager();
+
+    // Initialize GSAP
+    animationManager.initGSAP().then((gsapLoaded) => {
+        if (gsapLoaded) {
+            // Initialize portfolio animation
+            animationManager.initPortfolioAnimation();
+
+            // Setup resize listener for responsive behavior
+            animationManager.setupResizeListener();
+
+            // Store manager globally for debugging
+            window.gsapAnimationManager = animationManager;
+
+            console.log('GSAP animation initialized successfully');
+        } else {
+            console.log('GSAP not available, portfolio will display normally');
+        }
+    }).catch((error) => {
+        console.error('Error initializing GSAP animation:', error);
     });
 }
